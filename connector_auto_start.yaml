@@ -1,0 +1,41 @@
+---
+- hosts: kafka_connect
+  name: Deploying Connector Auto start
+  gather_facts: False
+  remote_user: devops
+  become: yes
+  become_method: sudo
+  vars_files:
+    - vars.yaml
+  tasks:
+    - name: Create Home for Connector Script
+      ansible.builtin.file:
+        path: /app/connectors/
+        state: directory
+        owner: devops
+        group: devops
+        mode: 0755
+    - name: processing 'connector_auto_start.sh' and placing into Home
+      template:
+        src: script_connector_auto_start.j2
+        dest: /app/connectors/connector_auto_start.sh
+        owner: devops
+        group: devops
+        mode: 0755
+    - cron:
+        name: "connector_auto_start"
+        user: "devops"
+        minute: "*/5"
+        job: "/app/connectors/connector_auto_start.sh 2>&1 >> /app/connectors/connector_auto_start.log"
+        #state: absent  ## if anytime want to remove cron from system.
+    - name: Placing logrotate conf file
+      template:
+        src: logrotate_connector_auto_start
+        dest: /etc/logrotate.d/connector_auto_start
+    - name: Creating empty log file
+      ansible.builtin.copy:
+        content: ""
+        dest: /app/connectors/connector_auto_start.log
+        owner: devops
+        group: devops
+        mode: 0744
