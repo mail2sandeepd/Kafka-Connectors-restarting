@@ -3,8 +3,8 @@
 ######################### VARIABLES ###########################
 
 SERVER_NAME={{ inventory_hostname }}
-USERNAME=admin
-PASSWORD=admin-passwd
+USERNAME={{ kafka_user }}
+PASSWORD={{ kafka_password }}
 
 ############################################# CONNECTOERS SECTION ############################################################
 echo Starting at $(date +'%Y/%m/%d %H:%M:%S')
