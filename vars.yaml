@@ -1,0 +1,2 @@
+ansible_ssh_pass: your passowrd
+ansible_become_pass: become password
