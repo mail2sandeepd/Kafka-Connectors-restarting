@@ -1,0 +1,9 @@
+/app/connectors/connector_auto_start.log {
+        weekly
+        copytruncate
+        create 644 kafkaadm kafkasys
+        dateext
+        rotate 4
+        compress
+        missingok
+}
